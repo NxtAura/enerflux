@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- LOADING SCREEN -->
   <div id="loading-screen">
     <div class="loader-content">
       <div class="loader-ring"></div>
@@ -20,9 +19,7 @@
     </div>
   </div>
 
-  <!-- MAIN APP -->
   <div id="app" class="hidden">
-    <!-- NAV -->
     <nav id="main-nav">
       <div class="nav-left">
         <div class="nav-brand">ENERFLUX</div>
@@ -40,12 +37,10 @@
       </div>
     </nav>
 
-    <!-- SECTION: LANDSCAPE -->
+    <!-- ═══ LANDSCAPE ═══ -->
     <section id="section-landscape" class="section active">
-      <!-- 3D Landscape Canvas -->
       <canvas id="landscape-canvas"></canvas>
 
-      <!-- Hero Overlay -->
       <div id="hero-overlay">
         <div class="hero-left">
           <h1 class="hero-title">ENERFLUX</h1>
@@ -72,123 +67,99 @@
           </div>
         </div>
         <div class="hero-right">
-          <!-- Energy flow summary -->
           <div class="flow-summary">
             <div class="flow-item" data-source="solar">
-              <div class="flow-icon sun-icon">☀</div>
+              <div class="flow-icon sun-icon"></div>
               <div class="flow-info">
                 <div class="flow-name">Solar PV</div>
                 <div class="flow-power" id="flow-solar">82 kW</div>
               </div>
-              <div class="flow-bar"><div class="flow-bar-fill solar-fill" id="bar-solar" style="width:68%"></div></div>
+              <div class="flow-bar"><div class="flow-bar-fill solar-fill" id="bar-solar"></div></div>
             </div>
             <div class="flow-item" data-source="wind">
-              <div class="flow-icon wind-icon">🌬</div>
+              <div class="flow-icon wind-icon"></div>
               <div class="flow-info">
                 <div class="flow-name">Wind</div>
                 <div class="flow-power" id="flow-wind">64 kW</div>
               </div>
-              <div class="flow-bar"><div class="flow-bar-fill wind-fill" id="bar-wind" style="width:64%"></div></div>
+              <div class="flow-bar"><div class="flow-bar-fill wind-fill" id="bar-wind"></div></div>
             </div>
             <div class="flow-item" data-source="hydro">
-              <div class="flow-icon hydro-icon">💧</div>
+              <div class="flow-icon hydro-icon"></div>
               <div class="flow-info">
                 <div class="flow-name">Hydro</div>
                 <div class="flow-power" id="flow-hydro">51 kW</div>
               </div>
-              <div class="flow-bar"><div class="flow-bar-fill hydro-fill" id="bar-hydro" style="width:73%"></div></div>
+              <div class="flow-bar"><div class="flow-bar-fill hydro-fill" id="bar-hydro"></div></div>
             </div>
             <div class="flow-item" data-source="battery">
-              <div class="flow-icon batt-icon">🔋</div>
+              <div class="flow-icon batt-icon"></div>
               <div class="flow-info">
                 <div class="flow-name">Battery</div>
                 <div class="flow-power" id="flow-battery">+42 kW</div>
               </div>
-              <div class="flow-bar"><div class="flow-bar-fill batt-fill" id="bar-battery" style="width:42%"></div></div>
+              <div class="flow-bar"><div class="flow-bar-fill batt-fill" id="bar-battery"></div></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Decision Explanation Panel -->
       <div id="decision-panel" class="floating-panel hidden">
         <div class="panel-header">
-          <span class="panel-title">⚡ DECISION EXPLANATION</span>
-          <button class="panel-close" id="close-decision">✕</button>
+          <span class="panel-title">DECISION EXPLANATION</span>
+          <button class="panel-close" id="close-decision">&times;</button>
         </div>
-        <div class="panel-body" id="decision-body">
+        <div class="panel-body">
           <div class="decision-step">
             <div class="step-label">OBSERVATION</div>
-            <div class="step-text" id="decision-observation">Solar output fell 71% due to declining irradiance.</div>
+            <div class="step-text" id="decision-observation"></div>
           </div>
           <div class="decision-step">
             <div class="step-label">CONSTRAINT</div>
-            <div class="step-text" id="decision-constraint">Demand must be met: 142 kW required.</div>
+            <div class="step-text" id="decision-constraint"></div>
           </div>
           <div class="decision-step">
             <div class="step-label">DECISION</div>
-            <div class="step-text" id="decision-action">EnerFlux selected hydro + battery discharge to maintain demand while minimizing battery cycling.</div>
+            <div class="step-text" id="decision-action"></div>
           </div>
         </div>
       </div>
 
-      <!-- Grid Stress Test Panel -->
       <div id="stress-panel" class="control-panel">
         <div class="panel-header-sm">GRID STRESS TEST</div>
         <div class="stress-buttons">
-          <button class="stress-btn" data-event="solar-drop">☀ Solar Drop</button>
-          <button class="stress-btn" data-event="wind-drop">🌬 Wind Drop</button>
-          <button class="stress-btn" data-event="hydro-fail">💧 Hydro Failure</button>
-          <button class="stress-btn" data-event="demand-spike">⚡ Demand Spike</button>
-          <button class="stress-btn" data-event="low-battery">🔋 Low Battery</button>
-          <button class="stress-btn" data-event="storm">🌩 Storm</button>
-          <button class="stress-btn" data-event="night">🌙 Night</button>
-          <button class="stress-btn reset" data-event="reset">↺ RESET</button>
+          <button class="stress-btn" data-event="solar-drop">Solar Drop</button>
+          <button class="stress-btn" data-event="wind-drop">Wind Drop</button>
+          <button class="stress-btn" data-event="hydro-fail">Hydro Failure</button>
+          <button class="stress-btn" data-event="demand-spike">Demand Spike</button>
+          <button class="stress-btn" data-event="low-battery">Low Battery</button>
+          <button class="stress-btn" data-event="storm">Storm</button>
+          <button class="stress-btn" data-event="night">Night</button>
+          <button class="stress-btn reset" data-event="reset">RESET</button>
         </div>
-        <div id="stress-result" class="stress-result hidden">
-          <div class="stress-before" id="stress-before"></div>
-          <div class="stress-arrow">→</div>
-          <div class="stress-after" id="stress-after"></div>
-        </div>
+        <div id="stress-result" class="stress-result hidden"></div>
       </div>
 
-      <!-- Weather Controls -->
       <div id="weather-panel" class="control-panel">
         <div class="panel-header-sm">WEATHER</div>
         <div class="weather-buttons">
-          <button class="weather-btn active" data-weather="sunny">☀ Sunny</button>
-          <button class="weather-btn" data-weather="cloudy">⛅ Cloudy</button>
-          <button class="weather-btn" data-weather="rain">🌧 Rain</button>
-          <button class="weather-btn" data-weather="storm">🌩 Storm</button>
-          <button class="weather-btn" data-weather="night">🌙 Night</button>
-          <button class="weather-btn" data-weather="windy">🌬 High Wind</button>
+          <button class="weather-btn active" data-weather="sunny">Sunny</button>
+          <button class="weather-btn" data-weather="cloudy">Cloudy</button>
+          <button class="weather-btn" data-weather="rain">Rain</button>
+          <button class="weather-btn" data-weather="storm">Storm</button>
+          <button class="weather-btn" data-weather="night">Night</button>
+          <button class="weather-btn" data-weather="windy">High Wind</button>
         </div>
       </div>
 
-      <!-- System Impact Panel -->
       <div id="impact-panel" class="control-panel">
         <div class="panel-header-sm">SYSTEM IMPACT</div>
         <div class="impact-grid">
-          <div class="impact-item">
-            <div class="impact-label">Renewable used</div>
-            <div class="impact-value" id="impact-renewable">91.3%</div>
-          </div>
-          <div class="impact-item">
-            <div class="impact-label">CO₂ avoided</div>
-            <div class="impact-value" id="impact-co2">128 kg</div>
-          </div>
-          <div class="impact-item">
-            <div class="impact-label">Operating cost</div>
-            <div class="impact-value" id="impact-cost">$127.42</div>
-          </div>
-          <div class="impact-item">
-            <div class="impact-label">Curtailment</div>
-            <div class="impact-value" id="impact-curtail">4.8%</div>
-          </div>
-          <div class="impact-item">
-            <div class="impact-label">Battery degrade</div>
-            <div class="impact-value" id="impact-degrade">$8.41</div>
-          </div>
+          <div class="impact-item"><div class="impact-label">Renewable used</div><div class="impact-value" id="impact-renewable">91.3%</div></div>
+          <div class="impact-item"><div class="impact-label">CO2 avoided</div><div class="impact-value" id="impact-co2">128 kg</div></div>
+          <div class="impact-item"><div class="impact-label">Operating cost</div><div class="impact-value" id="impact-cost">$127.42</div></div>
+          <div class="impact-item"><div class="impact-label">Curtailment</div><div class="impact-value" id="impact-curtail">4.8%</div></div>
+          <div class="impact-item"><div class="impact-label">Battery degrade</div><div class="impact-value" id="impact-degrade">$8.41</div></div>
         </div>
         <div class="optimization-mode">
           <div class="mode-label">OPTIMIZATION MODE</div>
@@ -201,27 +172,25 @@
         </div>
       </div>
 
-      <!-- Emergency Banner -->
       <div id="emergency-banner" class="hidden">
         <div class="emergency-content">
-          <div class="emergency-icon">⚠</div>
+          <div class="emergency-icon">!</div>
           <div class="emergency-text">GRID UNDER STRESS</div>
           <div class="emergency-sub" id="emergency-sub">Multiple generation sources compromised</div>
-          <button class="btn-emergency" id="btn-recover">OPTIMIZE & RECOVER</button>
+          <button class="btn-recover" id="btn-recover">OPTIMIZE &amp; RECOVER</button>
         </div>
       </div>
 
-      <!-- Stabilized Banner -->
       <div id="stabilized-banner" class="hidden">
         <div class="stabilized-content">
-          <div class="stabilized-icon">✓</div>
+          <div class="stabilized-icon">&check;</div>
           <div class="stabilized-text">GRID STABILIZED</div>
           <div class="stabilized-sub" id="stabilized-sub">0 kWh unmet demand</div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION: 24H FORECAST -->
+    <!-- ═══ 24H FORECAST ═══ -->
     <section id="section-analytics" class="section">
       <div class="analytics-container">
         <div class="analytics-header">
@@ -252,36 +221,20 @@
       </div>
     </section>
 
-    <!-- SECTION: COMPARE -->
+    <!-- ═══ COMPARE ═══ -->
     <section id="section-compare" class="section">
       <div class="compare-container">
         <h2 class="section-title">WHY OPTIMIZATION MATTERS</h2>
-        <p class="section-desc">Compare naive rule-based control against EnerFlux's multi-objective constrained optimization.</p>
+        <p class="section-desc">Compare naive rule-based control against EnerFlux multi-objective constrained optimization.</p>
         <div class="compare-grid">
           <div class="compare-card naive">
             <div class="compare-card-header">NAIVE CONTROL</div>
-            <div class="compare-card-sub">Solar → Wind → Hydro → Battery</div>
+            <div class="compare-card-sub">Solar then Wind then Hydro then Battery</div>
             <div class="compare-metrics">
-              <div class="compare-metric">
-                <div class="cm-label">Operating Cost</div>
-                <div class="cm-value" id="naive-cost">$184</div>
-                <div class="cm-bar"><div class="cm-bar-fill naive-fill" id="naive-cost-bar" style="width:100%"></div></div>
-              </div>
-              <div class="compare-metric">
-                <div class="cm-label">CO₂ Emissions</div>
-                <div class="cm-value" id="naive-co2">84 kg</div>
-                <div class="cm-bar"><div class="cm-bar-fill naive-fill" id="naive-co2-bar" style="width:100%"></div></div>
-              </div>
-              <div class="compare-metric">
-                <div class="cm-label">Battery Cycles</div>
-                <div class="cm-value" id="naive-cycles">3.8</div>
-                <div class="cm-bar"><div class="cm-bar-fill naive-fill" id="naive-cycles-bar" style="width:100%"></div></div>
-              </div>
-              <div class="compare-metric">
-                <div class="cm-label">Unserved Energy</div>
-                <div class="cm-value" id="naive-unmet">11 kWh</div>
-                <div class="cm-bar"><div class="cm-bar-fill naive-fill" id="naive-unmet-bar" style="width:100%"></div></div>
-              </div>
+              <div class="compare-metric"><div class="cm-label">Operating Cost</div><div class="cm-value" id="naive-cost">$184</div><div class="cm-bar"><div class="cm-bar-fill naive-fill" id="naive-cost-bar"></div></div></div>
+              <div class="compare-metric"><div class="cm-label">CO2 Emissions</div><div class="cm-value" id="naive-co2">84 kg</div><div class="cm-bar"><div class="cm-bar-fill naive-fill" id="naive-co2-bar"></div></div></div>
+              <div class="compare-metric"><div class="cm-label">Battery Cycles</div><div class="cm-value" id="naive-cycles">3.8</div><div class="cm-bar"><div class="cm-bar-fill naive-fill" id="naive-cycles-bar"></div></div></div>
+              <div class="compare-metric"><div class="cm-label">Unserved Energy</div><div class="cm-value" id="naive-unmet">11 kWh</div><div class="cm-bar"><div class="cm-bar-fill naive-fill" id="naive-unmet-bar"></div></div></div>
             </div>
           </div>
           <div class="compare-vs">VS</div>
@@ -289,92 +242,50 @@
             <div class="compare-card-header">ENERFLUX</div>
             <div class="compare-card-sub">Multi-objective constrained optimization</div>
             <div class="compare-metrics">
-              <div class="compare-metric">
-                <div class="cm-label">Operating Cost</div>
-                <div class="cm-value" id="ef-cost">$127</div>
-                <div class="cm-bar"><div class="cm-bar-fill ef-fill" id="ef-cost-bar" style="width:69%"></div></div>
-              </div>
-              <div class="compare-metric">
-                <div class="cm-label">CO₂ Emissions</div>
-                <div class="cm-value" id="ef-co2">61 kg</div>
-                <div class="cm-bar"><div class="cm-bar-fill ef-fill" id="ef-co2-bar" style="width:73%"></div></div>
-              </div>
-              <div class="compare-metric">
-                <div class="cm-label">Battery Cycles</div>
-                <div class="cm-value" id="ef-cycles">1.9</div>
-                <div class="cm-bar"><div class="cm-bar-fill ef-fill" id="ef-cycles-bar" style="width:50%"></div></div>
-              </div>
-              <div class="compare-metric">
-                <div class="cm-label">Unserved Energy</div>
-                <div class="cm-value" id="ef-unmet">0 kWh</div>
-                <div class="cm-bar"><div class="cm-bar-fill ef-fill" id="ef-unmet-bar" style="width:0%"></div></div>
-              </div>
+              <div class="compare-metric"><div class="cm-label">Operating Cost</div><div class="cm-value" id="ef-cost">$127</div><div class="cm-bar"><div class="cm-bar-fill ef-fill" id="ef-cost-bar"></div></div></div>
+              <div class="compare-metric"><div class="cm-label">CO2 Emissions</div><div class="cm-value" id="ef-co2">61 kg</div><div class="cm-bar"><div class="cm-bar-fill ef-fill" id="ef-co2-bar"></div></div></div>
+              <div class="compare-metric"><div class="cm-label">Battery Cycles</div><div class="cm-value" id="ef-cycles">1.9</div><div class="cm-bar"><div class="cm-bar-fill ef-fill" id="ef-cycles-bar"></div></div></div>
+              <div class="compare-metric"><div class="cm-label">Unserved Energy</div><div class="cm-value" id="ef-unmet">0 kWh</div><div class="cm-bar"><div class="cm-bar-fill ef-fill" id="ef-unmet-bar"></div></div></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION: HOW IT WORKS -->
+    <!-- ═══ HOW IT WORKS ═══ -->
     <section id="section-how-it-works" class="section">
       <div class="how-container">
         <h2 class="section-title">HOW ENERFLUX THINKS</h2>
         <div class="pipeline">
-          <div class="pipe-step">
-            <div class="pipe-icon">📊</div>
-            <div class="pipe-title">FORECAST</div>
-            <div class="pipe-desc">Solar / Wind / Hydro / Demand</div>
-            <div class="pipe-data" id="pipe-forecast">Solar 82kW · Wind 64kW · Hydro 51kW · Demand 142kW</div>
-          </div>
-          <div class="pipe-arrow">↓</div>
-          <div class="pipe-step">
-            <div class="pipe-icon">🔒</div>
-            <div class="pipe-title">CONSTRAINTS</div>
-            <div class="pipe-desc">Generation limits · Battery limits · Demand requirements</div>
-            <div class="pipe-data" id="pipe-constraints">Gen ≤ 290kW · Batt 10-100% SOC · Discharge ≤ 100kW</div>
-          </div>
-          <div class="pipe-arrow">↓</div>
-          <div class="pipe-step">
-            <div class="pipe-icon">⚙</div>
-            <div class="pipe-title">OPTIMIZATION</div>
-            <div class="pipe-desc">Minimize: Cost + CO₂ + Battery wear + Curtailment</div>
-            <div class="pipe-data" id="pipe-optimize">Weighted objective · Linear constraints · Deterministic solution</div>
-          </div>
-          <div class="pipe-arrow">↓</div>
-          <div class="pipe-step">
-            <div class="pipe-icon">⚡</div>
-            <div class="pipe-title">DISPATCH</div>
-            <div class="pipe-desc">Optimal generation setpoints sent to each source</div>
-            <div class="pipe-data" id="pipe-dispatch">Solar 82kW · Wind 64kW · Hydro 51kW · Batt +42kW</div>
-          </div>
-          <div class="pipe-arrow">↓</div>
-          <div class="pipe-step">
-            <div class="pipe-icon">✓</div>
-            <div class="pipe-title">GRID STABILITY</div>
-            <div class="pipe-desc">Generation = Demand · All constraints satisfied</div>
-            <div class="pipe-data" id="pipe-stability">197 kW gen = 142 kW demand · Margin: +55 kW</div>
-          </div>
+          <div class="pipe-step"><div class="pipe-title">FORECAST</div><div class="pipe-desc">Solar / Wind / Hydro / Demand prediction</div><div class="pipe-data" id="pipe-forecast"></div></div>
+          <div class="pipe-arrow">&darr;</div>
+          <div class="pipe-step"><div class="pipe-title">CONSTRAINTS</div><div class="pipe-desc">Generation limits, battery limits, demand requirements</div><div class="pipe-data" id="pipe-constraints">Gen &le; 290kW &middot; Batt 10-100% SOC &middot; Discharge &le; 100kW</div></div>
+          <div class="pipe-arrow">&darr;</div>
+          <div class="pipe-step"><div class="pipe-title">OPTIMIZATION</div><div class="pipe-desc">Minimize: Cost + CO2 + Battery wear + Curtailment</div><div class="pipe-data">Weighted objective &middot; Linear constraints &middot; Deterministic solution</div></div>
+          <div class="pipe-arrow">&darr;</div>
+          <div class="pipe-step"><div class="pipe-title">DISPATCH</div><div class="pipe-desc">Optimal generation setpoints sent to each source</div><div class="pipe-data" id="pipe-dispatch"></div></div>
+          <div class="pipe-arrow">&darr;</div>
+          <div class="pipe-step"><div class="pipe-title">GRID STABILITY</div><div class="pipe-desc">Generation = Demand, all constraints satisfied</div><div class="pipe-data" id="pipe-stability"></div></div>
         </div>
-        <div class="math-expand" id="math-expand">
-          <button class="math-toggle" id="math-toggle">Show Mathematical Formulation ▾</button>
+        <div class="math-expand">
+          <button class="math-toggle" id="math-toggle">Show Mathematical Formulation</button>
           <div class="math-content hidden" id="math-content">
             <div class="math-block">
               <div class="math-title">Objective Function</div>
-              <div class="math-eq">minimize Z = w₁·C(solar,wind,hydro) + w₂·E(solar,wind,hydro) + w₃·D(batt_charge,batt_discharge) + w₄·Q(solar_avail-solar_used) + w₅·U(max(0, demand - Σgen))</div>
+              <div class="math-eq">minimize Z = w1*C(gen) + w2*E(gen) + w3*D(batt) + w4*Q(curtailed) + w5*U(unmet)</div>
             </div>
             <div class="math-block">
               <div class="math-title">Subject to</div>
-              <div class="math-eq">Σ gen + batt_discharge - batt_charge = demand</div>
-              <div class="math-eq">0 ≤ gen_i ≤ capacity_i for each source i</div>
-              <div class="math-eq">SOC_min ≤ SOC ≤ SOC_max</div>
-              <div class="math-eq">-P_discharge_max ≤ P_batt ≤ P_charge_max</div>
+              <div class="math-eq">sum(gen) + batt_discharge - batt_charge = demand</div>
+              <div class="math-eq">0 &le; gen_i &le; capacity_i for each source i</div>
+              <div class="math-eq">SOC_min &le; SOC &le; SOC_max</div>
+              <div class="math-eq">-P_discharge_max &le; P_batt &le; P_charge_max</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- FOOTER -->
     <footer id="main-footer">
       <div class="footer-left">
         <div class="footer-brand">ENERFLUX</div>
@@ -383,8 +294,8 @@
       <div class="footer-right">
         <div class="footer-stat">Simulation Engine: <span class="green">Online</span></div>
         <div class="footer-stat">Optimization: <span class="green">Active</span></div>
-        <div class="footer-stat">Forecast Horizon: <span>24h</span></div>
-        <div class="footer-stat">Grid Frequency: <span>60.00 Hz</span></div>
+        <div class="footer-stat">Forecast Horizon: 24h</div>
+        <div class="footer-stat">Grid Frequency: 60.00 Hz</div>
       </div>
     </footer>
   </div>
