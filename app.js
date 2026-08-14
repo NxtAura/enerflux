@@ -310,7 +310,8 @@ const L = {
     // ── SKY ──
     const skyGrad = ctx.createLinearGradient(0, 0, 0, H * 0.62);
     skyGrad.addColorStop(0, `rgb(${sky[0]},${sky[1]},${sky[2]})`);
-    skyGrad.addColorStop(1, `rgb(${sky[0]+18},${sky[1]+28},${sky[2]+12})`);
+    skyGrad.addColorStop(0.6, `rgb(${sky[0]+12},${sky[1]+22},${sky[2]+8})`);
+    skyGrad.addColorStop(1, `rgb(${sky[0]+20},${sky[1]+32},${sky[2]+15})`);
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, W, H * 0.62);
 
@@ -328,17 +329,26 @@ const L = {
     // ── SUN / MOON ──
     const sunX = W * 0.72 + mx * -3, sunY = H * 0.1 + my * -2;
     if (S.weather !== 'night') {
-      const sg = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 100);
       const sa = clamp(1 - S.panelDark * 0.7, 0.1, 1);
-      sg.addColorStop(0, `rgba(255,220,100,${0.85 * sa})`);
-      sg.addColorStop(0.35, `rgba(255,200,80,${0.25 * sa})`);
+      // Outer corona
+      const sg2 = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 140);
+      sg2.addColorStop(0, `rgba(255,220,100,${0.3 * sa})`);
+      sg2.addColorStop(0.5, `rgba(255,200,80,${0.06 * sa})`);
+      sg2.addColorStop(1, 'rgba(255,200,80,0)');
+      ctx.fillStyle = sg2;
+      ctx.fillRect(sunX - 160, sunY - 160, 320, 320);
+      // Inner glow
+      const sg = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 60);
+      sg.addColorStop(0, `rgba(255,235,150,${0.9 * sa})`);
+      sg.addColorStop(0.4, `rgba(255,220,100,${0.4 * sa})`);
       sg.addColorStop(1, 'rgba(255,200,80,0)');
       ctx.fillStyle = sg;
-      ctx.fillRect(sunX - 120, sunY - 120, 240, 240);
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 16, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,230,130,${sa})`;
-      ctx.fill();
+      ctx.fillRect(sunX - 70, sunY - 70, 140, 140);
+      // Core
+      ctx.beginPath(); ctx.arc(sunX, sunY, 14, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,240,170,${sa})`; ctx.fill();
+      ctx.beginPath(); ctx.arc(sunX, sunY, 10, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,250,220,${sa * 0.8})`; ctx.fill();
     } else {
       ctx.beginPath();
       ctx.arc(sunX, sunY, 12, 0, Math.PI * 2);
@@ -467,9 +477,16 @@ const L = {
     // ── ATMOSPHERIC HAZE ──
     const haze = ctx.createLinearGradient(0, H * 0.38, 0, H * 0.6);
     haze.addColorStop(0, 'rgba(25,45,35,0)');
-    haze.addColorStop(1, `rgba(${sky[0]+8},${sky[1]+16},${sky[2]+8},0.15)`);
+    haze.addColorStop(1, `rgba(${sky[0]+8},${sky[1]+16},${sky[2]+8},0.18)`);
     ctx.fillStyle = haze;
     ctx.fillRect(0, H * 0.38, W, H * 0.22);
+
+    // ── VIGNETTE ──
+    const vig = ctx.createRadialGradient(W * 0.5, H * 0.5, W * 0.25, W * 0.5, H * 0.5, W * 0.7);
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, 'rgba(0,0,0,0.35)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, W, H);
 
     this.t += 0.016;
     this.waterOff += 0.6;
@@ -567,30 +584,40 @@ const L = {
       const tx = bx + i * 50;
       const ty = by - (i === 1 ? 8 : 0);
       const th = 58 + (i === 1 ? 8 : 0);
-      // Tower (tapered)
-      ctx.strokeStyle = 'rgba(175,180,185,0.65)';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath(); ctx.moveTo(tx - 1, ty); ctx.lineTo(tx, ty - th); ctx.stroke();
+      // Tower (tapered, 3D feel)
+      ctx.strokeStyle = 'rgba(175,180,185,0.6)';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(tx - 1.5, ty); ctx.lineTo(tx, ty - th); ctx.stroke();
+      ctx.strokeStyle = 'rgba(140,145,150,0.4)';
       ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(tx + 1, ty); ctx.lineTo(tx, ty - th); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(tx + 1.5, ty); ctx.lineTo(tx, ty - th); ctx.stroke();
       // Nacelle
-      ctx.fillStyle = 'rgba(195,200,205,0.75)';
-      ctx.fillRect(tx - 3, ty - th - 2, 8, 5);
-      // Blades
+      ctx.fillStyle = 'rgba(195,200,205,0.7)';
+      ctx.fillRect(tx - 4, ty - th - 2.5, 9, 5);
+      ctx.fillStyle = 'rgba(170,175,180,0.5)';
+      ctx.fillRect(tx - 4, ty - th + 1, 9, 1.5);
+      // Blades (sharper, tapered)
       const bl = 25 + (i === 1 ? 4 : 0);
       const ang = this.t * rpm * 0.008 + i * 2.1;
-      ctx.strokeStyle = 'rgba(205,210,215,0.75)';
-      ctx.lineWidth = 1.8;
+      ctx.strokeStyle = 'rgba(210,215,220,0.7)';
+      ctx.lineWidth = 1.5;
       for (let b = 0; b < 3; b++) {
         const ba = ang + b * Math.PI * 2 / 3;
+        const ex = tx + 1 + Math.cos(ba) * bl;
+        const ey = ty - th + Math.sin(ba) * bl;
         ctx.beginPath();
         ctx.moveTo(tx + 1, ty - th);
-        ctx.lineTo(tx + 1 + Math.cos(ba) * bl, ty - th + Math.sin(ba) * bl);
+        ctx.lineTo(ex, ey);
         ctx.stroke();
+        // Blade tip glow
+        ctx.beginPath(); ctx.arc(ex, ey, 1, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(220,225,230,0.4)'; ctx.fill();
       }
       // Hub
-      ctx.beginPath(); ctx.arc(tx + 1, ty - th, 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(150,155,160,0.85)'; ctx.fill();
+      ctx.beginPath(); ctx.arc(tx + 1, ty - th, 3, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(160,165,170,0.85)'; ctx.fill();
+      ctx.beginPath(); ctx.arc(tx + 1, ty - th, 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(200,205,210,0.6)'; ctx.fill();
     }
   },
 
@@ -637,30 +664,43 @@ const L = {
     const color = soc > 0.5 ? [46,204,113] : soc > 0.2 ? [240,192,64] : [231,76,60];
 
     // Shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.fillRect(bx + 3, by + 3, 50, 26);
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.beginPath();
+    ctx.roundRect(bx + 3, by + 4, 50, 26, 3);
+    ctx.fill();
 
-    // Body
-    ctx.fillStyle = 'rgba(45,50,50,0.9)';
-    ctx.fillRect(bx, by, 50, 26);
+    // Body (with gradient for 3D)
+    const battGrad = ctx.createLinearGradient(bx, by, bx, by + 26);
+    battGrad.addColorStop(0, 'rgba(55,60,58,0.92)');
+    battGrad.addColorStop(1, 'rgba(35,40,38,0.92)');
+    ctx.fillStyle = battGrad;
+    ctx.beginPath(); ctx.roundRect(bx, by, 50, 26, 3); ctx.fill();
 
     // SOC fill
     const sw = 46 * soc;
-    ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},0.55)`;
-    ctx.fillRect(bx + 2, by + 2, sw, 22);
+    const socGrad = ctx.createLinearGradient(bx + 2, by + 2, bx + 2 + sw, by + 2);
+    socGrad.addColorStop(0, `rgba(${color[0]},${color[1]},${color[2]},0.45)`);
+    socGrad.addColorStop(1, `rgba(${color[0]},${color[1]},${color[2]},0.65)`);
+    ctx.fillStyle = socGrad;
+    ctx.beginPath(); ctx.roundRect(bx + 2, by + 2, sw, 22, 2); ctx.fill();
 
     // Glow when active
     if (S.battStatus === 'charging' || S.battStatus === 'discharging') {
-      ctx.shadowColor = `rgba(${color[0]},${color[1]},${color[2]},0.35)`;
-      ctx.shadowBlur = 12;
-      ctx.fillRect(bx, by, 50, 26);
+      ctx.shadowColor = `rgba(${color[0]},${color[1]},${color[2]},0.4)`;
+      ctx.shadowBlur = 16;
+      ctx.beginPath(); ctx.roundRect(bx, by, 50, 26, 3); ctx.fill();
       ctx.shadowBlur = 0;
     }
 
     // Outline
-    ctx.strokeStyle = 'rgba(90,95,95,0.55)';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(bx, by, 50, 26);
+    ctx.strokeStyle = 'rgba(100,105,102,0.45)';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.roundRect(bx, by, 50, 26, 3); ctx.stroke();
+
+    // Top highlight
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(bx + 4, by + 1); ctx.lineTo(bx + 46, by + 1); ctx.stroke();
 
     // Label
     ctx.fillStyle = 'rgba(190,190,190,0.65)';
@@ -686,16 +726,26 @@ const L = {
       const hx = hx0 + i * 28;
       const hy = hy0 + Math.sin(i * 1.5) * 4;
       const hh = 16 + (i % 2) * 7;
+      // Body shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.fillRect(hx + 2, hy - hh + 2, 20, hh);
       // Body
-      ctx.fillStyle = `rgba(${42 + i * 4},${48 + i * 3},${45 + i * 3},0.88)`;
+      const houseGrad = ctx.createLinearGradient(hx, hy - hh, hx + 20, hy);
+      houseGrad.addColorStop(0, `rgba(${44 + i * 4},${50 + i * 3},${47 + i * 3},0.9)`);
+      houseGrad.addColorStop(1, `rgba(${36 + i * 3},${42 + i * 2},${39 + i * 2},0.9)`);
+      ctx.fillStyle = houseGrad;
       ctx.fillRect(hx, hy - hh, 20, hh);
       // Roof
-      ctx.fillStyle = `rgba(${55 + i * 3},${50 + i * 2},${45},0.82)`;
+      ctx.fillStyle = `rgba(${58 + i * 3},${52 + i * 2},${46},0.85)`;
       ctx.beginPath();
       ctx.moveTo(hx - 2, hy - hh);
-      ctx.lineTo(hx + 10, hy - hh - 9);
+      ctx.lineTo(hx + 10, hy - hh - 10);
       ctx.lineTo(hx + 22, hy - hh);
       ctx.closePath(); ctx.fill();
+      // Roof highlight
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath(); ctx.moveTo(hx, hy - hh); ctx.lineTo(hx + 10, hy - hh - 10); ctx.stroke();
       // Windows
       const wg = di * (0.5 + Math.sin(this.t * 0.4 + i * 1.3) * 0.15);
       ctx.fillStyle = `rgba(255,215,110,${wg * 0.75})`;
@@ -729,10 +779,20 @@ const L = {
     ctx.beginPath(); ctx.moveTo(gridX, ly); ctx.lineTo(battX, ly); ctx.stroke();
     ctx.setLineDash([]);
 
-    // Grid node
-    ctx.beginPath(); ctx.arc(gridX, ly, 4, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(46,204,113,0.45)'; ctx.fill();
-    ctx.strokeStyle = 'rgba(46,204,113,0.65)'; ctx.lineWidth = 1.2; ctx.stroke();
+    // Grid node (pulsing)
+    const nodePulse = 0.8 + Math.sin(this.t * 1.5) * 0.2;
+    ctx.beginPath(); ctx.arc(gridX, ly, 5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(48,217,120,${0.15 * nodePulse})`; ctx.fill();
+    ctx.beginPath(); ctx.arc(gridX, ly, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(48,217,120,${0.5 * nodePulse})`; ctx.fill();
+    ctx.beginPath(); ctx.arc(gridX, ly, 2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(48,217,120,${0.8 * nodePulse})`; ctx.fill();
+    // Node glow
+    const ng = ctx.createRadialGradient(gridX, ly, 0, gridX, ly, 12);
+    ng.addColorStop(0, `rgba(48,217,120,${0.12 * nodePulse})`);
+    ng.addColorStop(1, 'rgba(48,217,120,0)');
+    ctx.fillStyle = ng;
+    ctx.fillRect(gridX - 14, ly - 14, 28, 28);
   },
 
   drawParticles(ctx, W, H, mx, my, gY) {
@@ -758,15 +818,33 @@ const L = {
         const px = rt.x0 + (rt.x1 - rt.x0) * prog + mx * -9;
         const py = ly + Math.sin(prog * Math.PI * 2.5 + i * 0.7) * 3.5;
         const a = 0.5 + Math.sin(prog * Math.PI) * 0.4;
-        // Core
-        ctx.beginPath(); ctx.arc(px, py, 2.2, 0, Math.PI * 2);
+
+        // Trail (fading line behind particle)
+        const trailLen = 6;
+        const tx2 = px - (rt.x1 - rt.x0) / Math.abs(rt.x1 - rt.x0 || 1) * trailLen * prog;
+        const trailGrad = ctx.createLinearGradient(tx2, py, px, py);
+        trailGrad.addColorStop(0, `rgba(${rt.c[0]},${rt.c[1]},${rt.c[2]},0)`);
+        trailGrad.addColorStop(1, `rgba(${rt.c[0]},${rt.c[1]},${rt.c[2]},${a * 0.3})`);
+        ctx.strokeStyle = trailGrad;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(tx2, py); ctx.lineTo(px, py); ctx.stroke();
+
+        // Core particle
+        ctx.beginPath(); ctx.arc(px, py, 2.5, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${rt.c[0]},${rt.c[1]},${rt.c[2]},${a})`;
         ctx.fill();
-        // Glow
-        const gg = ctx.createRadialGradient(px, py, 0, px, py, 7);
-        gg.addColorStop(0, `rgba(${rt.c[0]},${rt.c[1]},${rt.c[2]},0.2)`);
+
+        // Bright center
+        ctx.beginPath(); ctx.arc(px, py, 1, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${a * 0.5})`;
+        ctx.fill();
+
+        // Outer glow
+        const gg = ctx.createRadialGradient(px, py, 0, px, py, 9);
+        gg.addColorStop(0, `rgba(${rt.c[0]},${rt.c[1]},${rt.c[2]},0.18)`);
+        gg.addColorStop(0.5, `rgba(${rt.c[0]},${rt.c[1]},${rt.c[2]},0.04)`);
         gg.addColorStop(1, `rgba(${rt.c[0]},${rt.c[1]},${rt.c[2]},0)`);
-        ctx.beginPath(); ctx.arc(px, py, 7, 0, Math.PI * 2);
+        ctx.beginPath(); ctx.arc(px, py, 9, 0, Math.PI * 2);
         ctx.fillStyle = gg; ctx.fill();
       }
     });
